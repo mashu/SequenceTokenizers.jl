@@ -2,6 +2,8 @@ using SequenceTokenizers
 using BenchmarkTools
 
 SUITE = BenchmarkGroup()
-SUITE["rand"] = @benchmarkable rand(10)
-
-# Write your benchmarks here.
+TEST_ALPHABET = collect("ACGT")
+TEST_BATCH = collect.(["ACGTACGT", "TGCATGCA", "ATATATATA", "GCGCGCGC", "ACGTACGTACGT"])
+SUITE["tokenize_batch"] = @benchmarkable sequence_tokenizer($TEST_BATCH) setup = begin
+    sequence_tokenizer = SequenceTokenizer($TEST_ALPHABET, 'N')
+end
