@@ -44,4 +44,31 @@ using Optimisers
 
     # Test Optimisers.trainable method
     @test length(Optimisers.trainable(tokenizer)) == 0
+    
+    # Test onehot_batch
+    batch = Int32[2 4; 3 5; 1 2]  # Represents ['A', 'G'; 'C', 'T'; 'N', 'A']
+    onehot_encoded = onehot_batch(tokenizer, batch)
+
+    @test size(onehot_encoded) == (5, 3, 2)  # (num_tokens, seq_length, batch_size)
+    @test onehot_encoded[:, 1, 1] == [0, 1, 0, 0, 0]  # 'A'
+    @test onehot_encoded[:, 2, 1] == [0, 0, 1, 0, 0]  # 'C'
+    @test onehot_encoded[:, 3, 1] == [1, 0, 0, 0, 0]  # 'N'
+    @test onehot_encoded[:, 1, 2] == [0, 0, 0, 1, 0]  # 'G'
+    @test onehot_encoded[:, 2, 2] == [0, 0, 0, 0, 1]  # 'T'
+    @test onehot_encoded[:, 3, 2] == [0, 1, 0, 0, 0]  # 'A'
+
+    # Test onecold_batch
+    decoded_batch = onecold_batch(tokenizer, onehot_encoded)
+    @test size(decoded_batch) == size(batch)
+    @test decoded_batch == ['A' 'G'; 'C' 'T'; 'N' 'A']
+
+    # Test roundtrip: batch -> onehot -> onecold
+    roundtrip_batch = onecold_batch(tokenizer, onehot_batch(tokenizer, batch))
+    @test roundtrip_batch == ['A' 'G'; 'C' 'T'; 'N' 'A']
+
+    # Test with different batch
+    another_batch = Int32[1 3 5; 2 4 1]  # Represents ['N', 'C', 'T'; 'A', 'G', 'N']
+    another_onehot = onehot_batch(tokenizer, another_batch)
+    @test size(another_onehot) == (5, 2, 3)
+    @test onecold_batch(tokenizer, another_onehot) == ['N' 'C' 'T'; 'A' 'G' 'N']
 end

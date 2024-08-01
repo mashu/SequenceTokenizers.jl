@@ -1,8 +1,9 @@
 module SequenceTokenizers
     using Functors
     using Optimisers
+    using OneHotArrays
 
-    export SequenceTokenizer
+    export SequenceTokenizer, onehot_batch, onecold_batch
 
     struct SequenceTokenizer{T, V <: AbstractVector{T}}
         alphabet::V
@@ -69,7 +70,14 @@ module SequenceTokenizers
         return indices
     end
 
+    function onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractMatrix{Int32})
+        return OneHotArray(batch, length(tokenizer))
+    end
+
+    function onecold_batch(tokenizer::SequenceTokenizer, onehot_batch::OneHotArray)
+        return onecold(onehot_batch, tokenizer.alphabet)
+    end
+
     Functors.@functor SequenceTokenizer
     Optimisers.trainable(tokenizer::SequenceTokenizer) = NamedTuple()
-
 end
