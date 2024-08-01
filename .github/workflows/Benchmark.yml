@@ -3,6 +3,7 @@ name: Run benchmarks
 on:
   push:
     branches: [main]
+    tags: ['*']
   pull_request:
     branches: [main]
 
