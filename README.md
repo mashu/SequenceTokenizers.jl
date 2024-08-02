@@ -20,7 +20,10 @@ SequenceTokenizers.jl is a Julia package that offers a simple and efficient way 
 - Efficient lookup using vector
 - Batch processing capabilities
 - One-hot encoding and decoding support
-- Minimal dependency on Functors.jl, Optimisers.jl, and OneHotArrays.jl
+- Minimal dependency
+
+> :blue_book: **Note**
+> It is not a [Flux](https://fluxml.ai/Flux.jl) layer to keep dependencies minimal, therefore it cannot be placed inside a gradient block.
 
 ## Usage
 

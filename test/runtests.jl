@@ -1,6 +1,5 @@
 using SequenceTokenizers
 using Test
-using Optimisers
 
 @testset "SequenceTokenizer" begin
     alphabet = ['A', 'C', 'G', 'T']
@@ -42,9 +41,6 @@ using Optimisers
     tokenizer_with_existing_unksym = SequenceTokenizer(alphabet_with_unksym, 'N')
     @test tokenizer_with_existing_unksym.unkidx == 1  # 'N' should be found at index 1
 
-    # Test Optimisers.trainable method
-    @test length(Optimisers.trainable(tokenizer)) == 0
-    
     # Test onehot_batch
     batch = Int32[2 4; 3 5; 1 2]  # Represents ['A', 'G'; 'C', 'T'; 'N', 'A']
     onehot_encoded = onehot_batch(tokenizer, batch)
