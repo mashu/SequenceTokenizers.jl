@@ -86,13 +86,10 @@ using Test
     # Test with a sequence containing all possible tokens
     all_tokens_seq = Int32[1, 2, 3, 4, 5]  # Represents "NACGT"
     all_tokens_onehot = onehot_batch(tokenizer, all_tokens_seq)
-    @test size(all_tokens_onehot) == (5, 5)
-    # Check if the diagonal elements are all 1 and the sum is correct
-    for i in 1:5
-        @test all_tokens_onehot[i, i] == 1
-        @test sum(all_tokens_onehot[:, i]) == 1
-    end
-    @test sum(all_tokens_onehot) == 5
+    @test size(all_tokens_onehot) == (5, 5) &&
+        all(all_tokens_onehot[CartesianIndex.(1:5, 1:5)] .== 1) &&
+        all(sum(all_tokens_onehot, dims=1) .== 1) &&
+        sum(all_tokens_onehot) == 5
 
     @test size(onehot_encoded) == (5, 3, 2)  # (num_tokens, seq_length, batch_size)
     @test onehot_encoded[:, 1, 1] == [0, 1, 0, 0, 0]  # 'A'
