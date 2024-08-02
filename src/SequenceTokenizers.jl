@@ -1,6 +1,4 @@
 module SequenceTokenizers
-    using Functors
-    using Optimisers
     using OneHotArrays
 
     export SequenceTokenizer, onehot_batch, onecold_batch
@@ -78,6 +76,4 @@ module SequenceTokenizers
         return onecold(onehot_batch, tokenizer.alphabet)
     end
 
-    Functors.@functor SequenceTokenizer
-    Optimisers.trainable(tokenizer::SequenceTokenizer) = NamedTuple()
 end
