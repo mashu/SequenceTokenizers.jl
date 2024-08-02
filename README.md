@@ -22,8 +22,11 @@ SequenceTokenizers.jl is a Julia package that offers a simple and efficient way 
 - One-hot encoding and decoding support
 - Minimal dependency
 
-> :blue_book: **Note**
+> :blue_book: **Limitations**
 > It is not a [Flux](https://fluxml.ai/Flux.jl) layer to keep dependencies minimal, therefore it cannot be placed inside a gradient block.
+> Single characters must be Char type
+> Multiple character sequences must be String type
+> No mixed type arrays are supported, it's either Strings or Chars that produce correct behaviour
 
 ## Usage
 
