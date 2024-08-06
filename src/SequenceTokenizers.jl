@@ -32,7 +32,9 @@ recovered = onecold_batch(tokenizer, onehot)
 module SequenceTokenizers
     using OneHotArrays
 
-    export SequenceTokenizer, onehot_batch, onecold_batch
+    export SequenceTokenizer, onehot_batch, onecold_batch, AbstractSequenceTokenizer
+
+    abstract type AbstractSequenceTokenizer end
 
     """
         SequenceTokenizer{T, V <: AbstractVector{T}}
@@ -51,7 +53,7 @@ module SequenceTokenizers
     tokenizer = SequenceTokenizer(alphabet, 'x')
     ```
     """
-    struct SequenceTokenizer{T, V <: AbstractVector{T}}
+    struct SequenceTokenizer{T, V <: AbstractVector{T}} <: AbstractSequenceTokenizer
         alphabet::V
         lookup::Vector{Int32}
         unksym::T
@@ -96,7 +98,7 @@ module SequenceTokenizers
     end
 
     """
-        Base.length(tokenizer::SequenceTokenizer)
+        Base.length(tokenizer::AbstractSequenceTokenizer)
 
     Get the number of unique tokens in the tokenizer's alphabet.
 
@@ -110,7 +112,7 @@ module SequenceTokenizers
     println(length(tokenizer))  # Output: 4
     ```
     """
-    Base.length(tokenizer::SequenceTokenizer) = length(tokenizer.alphabet)
+    Base.length(tokenizer::AbstractSequenceTokenizer) = length(tokenizer.alphabet)
 
     """
         Base.show(io::IO, tokenizer::SequenceTokenizer{T}) where T
@@ -318,12 +320,12 @@ module SequenceTokenizers
     println(size(onehot))  # Output: (4, 3, 2)
     ```
     """
-    function onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractMatrix{Int32})
+    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractMatrix{Int32})
         return OneHotArray(batch, length(tokenizer))
     end
 
     """
-        onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractVector{Int32})
+        onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{Int32})
 
     Convert a batch of tokenized sequences to one-hot representations.
 
@@ -331,7 +333,7 @@ module SequenceTokenizers
     representation using the alphabet of the provided tokenizer.
 
     # Arguments
-    - `tokenizer::SequenceTokenizer`: The tokenizer used for the sequences. Its length
+    - `tokenizer::AbstractSequenceTokenizer`: The tokenizer used for the sequences. Its length
     determines the size of the one-hot encoding dimension.
     - `batch::AbstractVector{Int32}`: A vector of token indices to be converted to
     one-hot representation.
@@ -360,17 +362,17 @@ module SequenceTokenizers
     - [`onecold_batch`](@ref): The inverse operation, converting one-hot representations
     back to token indices.
     """
-    function onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractVector{Int32})
+    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{Int32})
         return OneHotArray(batch, length(tokenizer))
     end
 
     """
-        onecold_batch(tokenizer::SequenceTokenizer, onehot_batch::OneHotArray)
+        onecold_batch(tokenizer::AbstractSequenceTokenizer, onehot_batch::OneHotArray)
 
     Convert a one-hot representation back to tokenized sequences.
 
     # Arguments
-    - `tokenizer::SequenceTokenizer`: The tokenizer used for the sequences
+    - `tokenizer::AbstractSequenceTokenizer`: The tokenizer used for the sequences
     - `onehot_batch::OneHotArray`: A OneHotArray representing the one-hot encoding of sequences
 
     # Returns
@@ -388,7 +390,7 @@ module SequenceTokenizers
     println(recovered == ['a' 'c'; 'b' 'a'; 'x' 'b']) # Output: true
     ```
     """
-    function onecold_batch(tokenizer::SequenceTokenizer, onehot_batch::OneHotArray)
+    function onecold_batch(tokenizer::AbstractSequenceTokenizer, onehot_batch::OneHotArray)
         return onecold(onehot_batch, tokenizer.alphabet)
     end
 
