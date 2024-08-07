@@ -43,9 +43,9 @@ module SequenceTokenizers
 
     # Fields
     - `alphabet::V`: The set of valid symbols in the sequences
-    - `lookup::Vector{Int32}`: A lookup table for fast symbol-to-index conversion
+    - `lookup::Vector{UInt32}`: A lookup table for fast symbol-to-index conversion
     - `unksym::T`: The symbol to use for unknown tokens
-    - `unkidx::Int32`: The index assigned to the unknown symbol
+    - `unkidx::UInt32`: The index assigned to the unknown symbol
 
     # Example
     ```julia
@@ -55,9 +55,9 @@ module SequenceTokenizers
     """
     struct SequenceTokenizer{T, V <: AbstractVector{T}} <: AbstractSequenceTokenizer
         alphabet::V
-        lookup::Vector{Int32}
+        lookup::Vector{UInt32}
         unksym::T
-        unkidx::Int32
+        unkidx::UInt32
 
         """
             SequenceTokenizer(alphabet::V, unksym::T) where {T, V <: AbstractVector{T}}
@@ -78,18 +78,18 @@ module SequenceTokenizers
         ```
         """
         function SequenceTokenizer(alphabet::V, unksym::T) where {T, V <: AbstractVector{T}}
-            lookup = fill(Int32(0), 256)  # Covers all ASCII characters
+            lookup = fill(UInt32(0), 256)  # Covers all ASCII characters
 
             if !(unksym in alphabet)
                 alphabet = vcat(unksym, alphabet)
-                unkidx = Int32(1)
+                unkidx = UInt32(1)
             else
-                unkidx = Int32(findfirst(isequal(unksym), alphabet))
+                unkidx = UInt32(findfirst(isequal(unksym), alphabet))
             end
 
             for (idx, char) in enumerate(alphabet)
                 if codepoint(char) <= length(lookup)
-                    lookup[codepoint(char)] = Int32(idx)
+                    lookup[codepoint(char)] = UInt32(idx)
                 end
             end
 
@@ -193,7 +193,7 @@ module SequenceTokenizers
     - `input::AbstractString`: The input string to be tokenized
 
     # Returns
-    A Vector{Int32} of token indices corresponding to the characters in the input string
+    A Vector{UInt32} of token indices corresponding to the characters in the input string
 
     # Performance Notes
     - This method uses `collect(T, input)` to convert the string to a vector of type T
@@ -281,7 +281,7 @@ module SequenceTokenizers
     """
     function (tokenizer::SequenceTokenizer{T})(batch::AbstractVector{<:AbstractVector{T}}) where T
         max_length = maximum(length, batch)
-        indices = Matrix{Int32}(undef, max_length, length(batch))
+        indices = Matrix{UInt32}(undef, max_length, length(batch))
         unkidx = tokenizer.unkidx
         
         @inbounds for (j, seq) in enumerate(batch)
@@ -299,13 +299,13 @@ module SequenceTokenizers
     end
 
     """
-        onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractMatrix{Int32})
+        onehot_batch(tokenizer::SequenceTokenizer, batch::AbstractMatrix{UInt32})
 
     Convert a batch of tokenized sequences to one-hot representations.
 
     # Arguments
     - `tokenizer::SequenceTokenizer`: The tokenizer used for the sequences
-    - `batch::AbstractMatrix{Int32}`: A matrix of tokenized sequences
+    - `batch::AbstractMatrix{UInt32}`: A matrix of tokenized sequences
 
     # Returns
     A OneHotArray representing the one-hot encoding of the input batch
@@ -320,12 +320,12 @@ module SequenceTokenizers
     println(size(onehot))  # Output: (4, 3, 2)
     ```
     """
-    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractMatrix{Int32})
+    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractMatrix{UInt32})
         return OneHotArray(batch, length(tokenizer))
     end
 
     """
-        onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{Int32})
+        onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{UInt32})
 
     Convert a batch of tokenized sequences to one-hot representations.
 
@@ -335,7 +335,7 @@ module SequenceTokenizers
     # Arguments
     - `tokenizer::AbstractSequenceTokenizer`: The tokenizer used for the sequences. Its length
     determines the size of the one-hot encoding dimension.
-    - `batch::AbstractVector{Int32}`: A vector of token indices to be converted to
+    - `batch::AbstractVector{UInt32}`: A vector of token indices to be converted to
     one-hot representation.
 
     # Returns
@@ -362,7 +362,7 @@ module SequenceTokenizers
     - [`onecold_batch`](@ref): The inverse operation, converting one-hot representations
     back to token indices.
     """
-    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{Int32})
+    function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{UInt32})
         return OneHotArray(batch, length(tokenizer))
     end
 
