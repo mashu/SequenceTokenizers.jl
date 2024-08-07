@@ -25,27 +25,23 @@ SequenceTokenizers.jl is a Julia convenience package that offers a simplified an
 ```julia
 using SequenceTokenizers
 
+# Create tokenizer
 alphabet = ['A', 'C', 'G', 'T']
 tokenizer = SequenceTokenizer(alphabet, 'N')  # 'N' is the unknown symbol
 
-# Tokenize a single character
-tokenizer('A')  # Returns 2 (index in the alphabet)
-
-# Tokenize a sequence
-tokenizer(['A', 'C', 'T', 'X'])  # Returns [2, 3, 5, 1] ('X' is unknown, so it gets the index of 'N')
-
-# Convert token back to character
-tokenizer(2)  # Returns 'A'
+# Tokenize sequences (perhaps most common use case)
+tokens = tokenizer(["AGTCAGGACA","AGCGTGCGGGTAGGCTCGCC"])  # Returns UInt32[2 2; 4 4; 5 3; 3 4; 2 5; 4 4; 4 3; 2 4; 3 4; 2 4; 1 5; 1 2; 1 4; 1 4; 1 3; 1 5; 1 3; 1 4; 1 3; 1 3]
 
 # Create a batch of sequences
-batch = Int32[2 4; 3 5; 1 2]  # Represents ['A', 'G'; 'C', 'T'; 'N', 'A']
+batch = UInt32[2 2; 4 4; 5 3; 3 4; 2 5; 4 4; 4 3; 2 4; 3 4; 2 4; 1 5; 1 2; 1 4; 1 4; 1 3; 1 5; 1 3; 1 4; 1 3; 1 3]
 
 # Create one-hot encoded representation
 onehot_encoded = onehot_batch(tokenizer, batch)
 
 # Convert one-hot encoded representation back to characters
 decoded_batch = onecold_batch(tokenizer, onehot_encoded)
-# Returns ['A' 'G'; 'C' 'T'; 'N' 'A']
+# Returns ['A' 'A'; 'G' 'G'; 'T' 'C'; 'C' 'G'; 'A' 'T'; 'G' 'G'; 'G' 'C'; 'A' 'G'; 'C' 'G'; 'A' 'G'; 'N' 'T'; 'N' 'A'; 'N' 'G'; 'N' 'G'; 'N' 'C'; 'N' 'T'; 'N' 'C'; 'N' 'G'; 'N' 'C'; 'N' 'C'] with N characters right padding shorter sequence
+
 ```
 
 This package is useful for natural language processing tasks, sequence modeling, and any application that requires mapping between characters and integer tokens or one-hot encoded representations.
