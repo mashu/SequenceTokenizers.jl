@@ -5,22 +5,14 @@
 [![Coverage](https://codecov.io/gh/mashu/SequenceTokenizers.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mashu/SequenceTokenizers.jl)
 [![Benchmarks](https://img.shields.io/badge/benchmarks-view%20results-blue)](https://github.com/mashu/SequenceTokenizers.jl/actions?query=workflow%3ABenchmarks)
 
-SequenceTokenizers.jl is a Julia package that offers a simple and efficient way to tokenize character sequences. It provides a `SequenceTokenizer` struct that can:
+SequenceTokenizers.jl is a Julia convenience package that offers a simplified and efficient way to tokenize character sequences, wrapping functionality from [OneHotArrays](https://github.com/FluxML/OneHotArrays.jl) while handling `String` sequences and padding automatically. It provides a SequenceTokenizer struct that can:
 
 - Convert characters to integer tokens based on a predefined alphabet
 - Handle unknown characters with a customizable unknown symbol
-- Tokenize single characters, arrays of characters, and batches of sequences with **variable length**
+- Tokenize single characters, arrays of characters, and batches of sequences with **variable length** with automatic padding
 - Convert token indices back to characters
 - Create one-hot encoded representations of tokenized sequences
 - Convert one-hot encoded representations back to characters
-
-## Features
-
-- Customizable alphabet and unknown symbol
-- Efficient lookup using vector
-- Batch processing capabilities
-- One-hot encoding and decoding support
-- Minimal dependency
 
 > :blue_book: **Limitations**
 > - It is not a [Flux](https://fluxml.ai/Flux.jl) layer to keep dependencies minimal, therefore it cannot be placed inside a gradient block.
