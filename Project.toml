@@ -1,7 +1,7 @@
 name = "SequenceTokenizers"
 uuid = "782fbe24-d740-44eb-8e9f-f0831b1cb5e5"
 authors = ["Mateusz Kaduk <mateusz.kaduk@gmail.com>"]
-version = "0.0.1"
+version = "0.0.2"
 
 [deps]
 OneHotArrays = "0b1bfda6-eb8a-41d2-88d8-f5af5cad476f"
