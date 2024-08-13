@@ -92,12 +92,12 @@ using Test
         sum(all_tokens_onehot) == 5
 
     @test size(onehot_encoded) == (5, 3, 2)  # (num_tokens, seq_length, batch_size)
-    @test onehot_encoded[:, 1, 1] == [0, 1, 0, 0, 0]  # 'A'
-    @test onehot_encoded[:, 2, 1] == [0, 0, 1, 0, 0]  # 'C'
-    @test onehot_encoded[:, 3, 1] == [1, 0, 0, 0, 0]  # 'N'
-    @test onehot_encoded[:, 1, 2] == [0, 0, 0, 1, 0]  # 'G'
-    @test onehot_encoded[:, 2, 2] == [0, 0, 0, 0, 1]  # 'T'
-    @test onehot_encoded[:, 3, 2] == [0, 1, 0, 0, 0]  # 'A'
+    @test onehot_encoded[:, 1, 1] == Float32[0, 1, 0, 0, 0]  # 'A'
+    @test onehot_encoded[:, 2, 1] == Float32[0, 0, 1, 0, 0]  # 'C'
+    @test onehot_encoded[:, 3, 1] == Float32[1, 0, 0, 0, 0]  # 'N'
+    @test onehot_encoded[:, 1, 2] == Float32[0, 0, 0, 1, 0]  # 'G'
+    @test onehot_encoded[:, 2, 2] == Float32[0, 0, 0, 0, 1]  # 'T'
+    @test onehot_encoded[:, 3, 2] == Float32[0, 1, 0, 0, 0]  # 'A'
 
     # Test with an empty sequence
     empty_seq = UInt32[]

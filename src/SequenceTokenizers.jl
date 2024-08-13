@@ -390,7 +390,7 @@ module SequenceTokenizers
     println(recovered == ['a' 'c'; 'b' 'a'; 'x' 'b']) # Output: true
     ```
     """
-    function onecold_batch(tokenizer::AbstractSequenceTokenizer, onehot_batch::OneHotArray)
+    function onecold_batch(tokenizer::AbstractSequenceTokenizer, onehot_batch::AbstractArray)
         return onecold(onehot_batch, tokenizer.alphabet)
     end
 
