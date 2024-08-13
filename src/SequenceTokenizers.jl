@@ -321,7 +321,7 @@ module SequenceTokenizers
     ```
     """
     function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractMatrix{UInt32})
-        return OneHotArray(batch, length(tokenizer))
+        return Float32.(OneHotArray(batch, length(tokenizer)))
     end
 
     """
@@ -363,7 +363,7 @@ module SequenceTokenizers
     back to token indices.
     """
     function onehot_batch(tokenizer::AbstractSequenceTokenizer, batch::AbstractVector{UInt32})
-        return OneHotArray(batch, length(tokenizer))
+        return Float32.(OneHotArray(batch, length(tokenizer)))
     end
 
     """
