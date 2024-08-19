@@ -7,8 +7,8 @@ version = "0.0.4"
 OneHotArrays = "0b1bfda6-eb8a-41d2-88d8-f5af5cad476f"
 
 [compat]
-OneHotArrays = "^0.2"
-julia = "^1.10"
+OneHotArrays = "0.2.5"
+julia = "1.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
