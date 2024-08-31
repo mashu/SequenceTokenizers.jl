@@ -178,8 +178,14 @@ module SequenceTokenizers
     println(tokenizer(1))  # Output: 'x' (unknown token)
     ```
     """
-    @inline (tokenizer::SequenceTokenizer)(idx::Integer) = tokenizer.alphabet[idx]
-
+    @inline function (tokenizer::SequenceTokenizer)(idx::Integer)
+        if 1 <= idx <= length(tokenizer.alphabet)
+            return tokenizer.alphabet[idx]
+        else
+            return tokenizer.unksym
+        end
+    end
+    
     """
         (tokenizer::SequenceTokenizer{T})(input::AbstractString) where T
 
